@@ -12,5 +12,13 @@ SteganographyApp is a Python application built using Tkinter and PIL (Python Ima
 
 1. Clone the repository:
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/muhammad-haziqul-khair/Steganographer.git
    cd SteganographyApp
+2. Install Dependencies
+   ```bash
+   pip install -r requirements.txt
+
+## Usage
+Run the application:
+```bash
+python main.py
