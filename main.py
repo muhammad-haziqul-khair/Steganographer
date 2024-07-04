@@ -15,10 +15,10 @@ class SteganographyApp(ctk.CTk):
         self.navbar = ctk.CTkFrame(self)
         self.navbar.pack(side="top",fill="x")
 
-        self.encode_button = ctk.CTkButton(self.navbar,text="Encode")
+        self.encode_button = ctk.CTkButton(self.navbar,text="Encode",command=self.show_encode_window)
         self.encode_button.pack(side="left",fill = "x",expand = True,padx=10,pady=10)
         
-        self.decode_button = ctk.CTkButton(self.navbar,text="Decode")
+        self.decode_button = ctk.CTkButton(self.navbar,text="Decode",command=self.show_decode_window)
         self.decode_button.pack(side="left",fill = "x",expand = True,padx=10,pady=10)
 
         self.content_frame = ctk.CTkFrame(self)
@@ -58,14 +58,14 @@ class SteganographyApp(ctk.CTk):
         img = Image.open(image_path)
         encoded_img = img.copy()
         width, height = img.size
-        message += chr(0)  # Add a null character to mark the end of the message
+        message += chr(0)  
         message_bits = ''.join(format(ord(char), '08b') for char in message)
 
         index = 0
         for y in range(height):
             for x in range(width):
                 pixel = list(img.getpixel((x, y)))
-                for n in range(3):  # Loop over RGB values
+                for n in range(3): 
                     if index < len(message_bits):
                         pixel[n] = pixel[n] & ~1 | int(message_bits[index])
                         index += 1
@@ -87,7 +87,56 @@ class SteganographyApp(ctk.CTk):
         else:
             messagebox.showwarning("Input Error", "Please select an image.")
 
+    
+    def show_decode_window(self):
+        for widget in self.content_frame.winfo_children():
+            widget.destroy()
 
+        self.decode_label = ctk.CTkLabel(self.content_frame,text= "Decode Message from Image",font=("Arial",18,"bold"))
+        self.decode_label.pack(pady=20)
+
+
+        self.image_path_variable = StringVar()
+        self.image_path_entry = ctk.CTkEntry(self.content_frame, width=300, placeholder_text="Enter the path of the image",textvariable=self.image_path_variable)
+        self.image_path_entry.pack(pady=10)
+
+        self.select_image_button = ctk.CTkButton(self.content_frame, text="Browse Image",command=self.browse_image)
+        self.select_image_button.pack(pady=10)
+
+        self.decode_button = ctk.CTkButton(self.content_frame, text="Decode", command=self.decode_message)
+        self.decode_button.pack(pady=40)
+
+        self.message_label = self.decode_label = ctk.CTkLabel(self.content_frame,text= "",font=("Arial",14,))
+        self.message_label.pack(pady=0)
+
+    def decode_message(self):
+        if hasattr(self, 'image_path') and self.image_path:
+            message = self.decode_image(self.image_path)
+            if message:
+                self.message_label.configure(text=message)
+            else:
+                messagebox.showwarning("Decode Error", "No message found or image is corrupted.")
+        else:
+            messagebox.showwarning("Input Error", "Please select an image.")
+
+    def decode_image(self, image_path):
+        img = Image.open(image_path)
+        width, height = img.size
+        message_bits = ''
+        for y in range(height):
+            for x in range(width):
+                pixel = img.getpixel((x, y))
+                for n in range(3):  
+                    message_bits += str(pixel[n] & 1)
+
+        message = ''
+        for i in range(0, len(message_bits), 8):
+            byte = message_bits[i:i+8]
+            if byte == '00000000':  
+                break
+            message += chr(int(byte, 2))
+
+        return message
 if __name__ == "__main__":
     app = SteganographyApp()
     app.mainloop()
