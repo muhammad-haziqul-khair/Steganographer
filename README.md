@@ -22,3 +22,9 @@ SteganographyApp is a Python application built using Tkinter and PIL (Python Ima
 Run the application:
 ```bash
 python main.py
+
+## Encode:
+   Click on the "Encode" button to open the encoding window.
+   Browse and select an image file (PNG, JPG, JPEG).
+   Enter the message you want to hide in the image.
+   Click "Encode" and choose a location to save the output image file.
