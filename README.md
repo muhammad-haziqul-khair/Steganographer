@@ -23,8 +23,10 @@ Run the application:
 ```bash
 python main.py
 
-## Encode:
-> Click on the "Encode" button to open the encoding window.
-> Browse and select an image file (PNG, JPG, JPEG).
-> Enter the message you want to hide in the image.
-> Click "Encode" and choose a location to save the output image file.
+## Encode
+
+1. Click on the "Encode" button to open the encoding window.
+2. Browse and select an image file (PNG, JPG, JPEG).
+3. Enter the message you want to hide in the image.
+4. Click "Encode" and choose a location to save the output image file.
+
