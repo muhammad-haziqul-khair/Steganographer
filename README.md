@@ -24,7 +24,7 @@ Run the application:
 python main.py
 
 ## Encode:
-   Click on the "Encode" button to open the encoding window.
-   Browse and select an image file (PNG, JPG, JPEG).
-   Enter the message you want to hide in the image.
-   Click "Encode" and choose a location to save the output image file.
+> Click on the "Encode" button to open the encoding window.
+> Browse and select an image file (PNG, JPG, JPEG).
+> Enter the message you want to hide in the image.
+> Click "Encode" and choose a location to save the output image file.
