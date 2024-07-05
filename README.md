@@ -37,10 +37,10 @@ SteganographyApp is a Python application built using Tkinter and PIL (Python Ima
 
 ## Screenshots
 ### Encoding Window
-![ScreenShot1]()
+![ScreenShot1](https://github.com/muhammad-haziqul-khair/Steganographer/blob/main/s1.png)
 
 ### Decoding Window
-![ScreenShot1]()
+![ScreenShot1](https://github.com/muhammad-haziqul-khair/Steganographer/blob/main/s2.png)
 
 ## License
 This project is licensed under the MIT License 
