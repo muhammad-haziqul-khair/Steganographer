@@ -54,6 +54,34 @@ class SteganographyApp(ctk.CTk):
         self.encode_button.pack(pady=10)
 
 
+    def show_decode_window(self):
+        for widget in self.content_frame.winfo_children():
+            widget.destroy()
+
+        self.decode_label = ctk.CTkLabel(self.content_frame,text= "Decode Message from Image",font=("Arial",18,"bold"))
+        self.decode_label.pack(pady=20)
+
+
+        self.image_path_variable = StringVar()
+        self.image_path_entry = ctk.CTkEntry(self.content_frame, width=300, placeholder_text="Enter the path of the image",textvariable=self.image_path_variable)
+        self.image_path_entry.pack(pady=10)
+
+        self.select_image_button = ctk.CTkButton(self.content_frame, text="Browse Image",command=self.browse_image)
+        self.select_image_button.pack(pady=10)
+
+        self.decode_button = ctk.CTkButton(self.content_frame, text="Decode", command=self.decode_message)
+        self.decode_button.pack(pady=20)
+
+        # self.message_label =  ctk.CTkLabel(self.content_frame,text= "",font=("Arial",14,))
+        # self.message_label.pack(pady=0)
+
+        self.message_textbox = ctk.CTkTextbox(self.content_frame,state = "disabled")
+        self.message_textbox.pack(pady=10)
+        
+
+# __________________________________________________________________________________________________________________________
+
+
     def encode_image(self, image_path, message, output_path):
         img = Image.open(image_path)
         encoded_img = img.copy()
@@ -73,52 +101,6 @@ class SteganographyApp(ctk.CTk):
 
         encoded_img.save(output_path)
 
-
-    def encode_message(self):
-        if hasattr(self,"image_path") and self.image_path:
-            message = self.message_entry.get()
-            if message:
-                output_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG Files", "*.png")])
-                if output_path:
-                    self.encode_image(self.image_path,message,output_path)
-                    messagebox.showinfo("Success", "Message encoded successfully!")
-            else:
-                messagebox.showwarning("Input Error", "Please enter a message to encode.")
-        else:
-            messagebox.showwarning("Input Error", "Please select an image.")
-
-    
-    def show_decode_window(self):
-        for widget in self.content_frame.winfo_children():
-            widget.destroy()
-
-        self.decode_label = ctk.CTkLabel(self.content_frame,text= "Decode Message from Image",font=("Arial",18,"bold"))
-        self.decode_label.pack(pady=20)
-
-
-        self.image_path_variable = StringVar()
-        self.image_path_entry = ctk.CTkEntry(self.content_frame, width=300, placeholder_text="Enter the path of the image",textvariable=self.image_path_variable)
-        self.image_path_entry.pack(pady=10)
-
-        self.select_image_button = ctk.CTkButton(self.content_frame, text="Browse Image",command=self.browse_image)
-        self.select_image_button.pack(pady=10)
-
-        self.decode_button = ctk.CTkButton(self.content_frame, text="Decode", command=self.decode_message)
-        self.decode_button.pack(pady=40)
-
-        self.message_label = self.decode_label = ctk.CTkLabel(self.content_frame,text= "",font=("Arial",14,))
-        self.message_label.pack(pady=0)
-
-    def decode_message(self):
-        if hasattr(self, 'image_path') and self.image_path:
-            message = self.decode_image(self.image_path)
-            if message:
-                self.message_label.configure(text=message)
-            else:
-                messagebox.showwarning("Decode Error", "No message found or image is corrupted.")
-        else:
-            messagebox.showwarning("Input Error", "Please select an image.")
-
     def decode_image(self, image_path):
         img = Image.open(image_path)
         width, height = img.size
@@ -135,8 +117,43 @@ class SteganographyApp(ctk.CTk):
             if byte == '00000000':  
                 break
             message += chr(int(byte, 2))
-
         return message
+
+
+# ______________________________________________________________________________________________________________________________
+
+
+    def encode_message(self):
+        if hasattr(self,"image_path") and self.image_path:
+            message = self.message_entry.get()
+            if message:
+                output_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG Files", "*.png")])
+                if output_path:
+                    self.encode_image(self.image_path,message,output_path)
+                    messagebox.showinfo("Success", "Message encoded successfully!")
+            else:
+                messagebox.showwarning("Input Error", "Please enter a message to encode.")
+        else:
+            messagebox.showwarning("Input Error", "Please select an image.")
+
+
+    def decode_message(self):
+        if hasattr(self, 'image_path') and self.image_path:
+            message = self.decode_image(self.image_path)
+            if message:
+                self.message_textbox.configure(state = "normal")
+                self.message_textbox.delete("1.0", ctk.END)  # Clear the textbox
+                self.message_textbox.insert(ctk.END, message)
+                self.message_textbox.configure(state = "disabled") 
+                # self.message_label.configure(text=message)
+                # self.message_textbox.get("1.0",END)
+            else:
+                messagebox.showwarning("Decode Error", "No message found or image is corrupted.")
+        else:
+            messagebox.showwarning("Input Error", "Please select an image.")
+
+
+
 if __name__ == "__main__":
     app = SteganographyApp()
     app.mainloop()
